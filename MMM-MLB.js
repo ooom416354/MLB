@@ -1,21 +1,21 @@
-
 //Config
 //TBD - set these values in config.js
 var focusOn = "Yankees";
 
 //Date functions
 var dtDate = new Date();
-dtDate.setDate(dtDate.getDate() + 20);
-/*
+dtDate.setDate(dtDate.getDate());
+
 var strMth = ('0' + (dtDate.getMonth()+1)).slice(-2);
 var strDay = ('0' + dtDate.getDate()).slice(-2);
 var strYear = String(dtDate.getFullYear());
-*/
 
+/*
 //testing
-var strMth = "02";
-var strDay = "24";
-var strYear = "2017";
+var strMth = "07";
+var strDay = "16";
+var strYear = "2016";
+*/
 
 //Create connection to pull MLB JSON data
 var output = document.getElementById("output");
@@ -102,7 +102,12 @@ document.getElementById("btn1").onclick = function () {
                                     "Top " + myObj.data.games.game[i].status.inning;
                             }
                             else {
-                                output.innerHTML += "Bottom " + myObj.data.games.game[i].status.inning;
+                                output.innerHTML += 
+                                    myObj.data.games.game[i].away_team_name + " at " +
+                                    myObj.data.games.game[i].home_team_name + "<br>" +
+                                    myObj.data.games.game[i].linescore.r.away + " - " +
+                                    myObj.data.games.game[i].linescore.r.home + " " +
+                                    "Bottom " + myObj.data.games.game[i].status.inning;
                             }
                         }
                     }
