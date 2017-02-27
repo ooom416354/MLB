@@ -21,6 +21,9 @@ var strYear = "2016";
 var output = document.getElementById("output");
 //***TODO change to onload instead of a button click
 document.getElementById("button").onclick = function () {
+    //Clear existing data
+    document.getElementById("output").innerHTML = '';
+    //Instantiate connection to MLB JSON feed
     var connReq = new XMLHttpRequest();
     connReq.onreadystatechange =
         function () {
@@ -61,10 +64,12 @@ document.getElementById("button").onclick = function () {
                                 output.innerHTML +=
                                     "S - " + myObj.data.games.game[i].save_pitcher.first + " " +
                                     myObj.data.games.game[i].save_pitcher.last + " (" +
-                                    myObj.data.games.game[i].save_pitcher.saves + ")<br>" + 
-                                    myObj.data.games.game[i].alerts.text}
-                            else {myObj.data.games.game[i].alerts.text
-                            
+                                    myObj.data.games.game[i].save_pitcher.saves + ")<br>" +
+                                    myObj.data.games.game[i].alerts.text
+                            }
+                            else {
+                                myObj.data.games.game[i].alerts.text
+
                             }
                         }
                         //Check if game is scheduled, if so, list probable starting pitchers
@@ -105,7 +110,7 @@ document.getElementById("button").onclick = function () {
                                     myObj.data.games.game[i].home_probable_pitcher.era;
                             }
                             output.innerHTML += awayPitcher + " vs " + homePitcher + " <br>" +
-                                    myObj.data.games.game[i].alerts.text;
+                                myObj.data.games.game[i].alerts.text;
                         }
                         //Output inning, current pitcher, and score of in progress game.
                         else {
@@ -116,15 +121,15 @@ document.getElementById("button").onclick = function () {
                                     myObj.data.games.game[i].linescore.r.away + " - " +
                                     myObj.data.games.game[i].linescore.r.home + "<br>" +
                                     "Top " + myObj.data.games.game[i].status.inning + " - " +
-                                             myObj.data.games.game[i].status.o + " outs <br>" +
-              
+                                    myObj.data.games.game[i].status.o + " outs <br>" +
+
                                     myObj.data.games.game[i].opposing_pitcher.first + " " +
                                     myObj.data.games.game[i].opposing_pitcher.last + " vs " +
 
                                     myObj.data.games.game[i].pitcher.first + " " +
                                     myObj.data.games.game[i].pitcher.last + "<br>" +
-                                    
-                                    myObj.data.games.game[i].pbp.last;
+
+                                    myObj.data.games.game[i].pbp.last + "<br>";
 
                             }
                             else {
@@ -133,16 +138,16 @@ document.getElementById("button").onclick = function () {
                                     myObj.data.games.game[i].home_team_name + " " +
                                     myObj.data.games.game[i].linescore.r.away + " - " +
                                     myObj.data.games.game[i].linescore.r.home + "<br>" +
-                                    "Bottom " + myObj.data.games.game[i].status.inning + " - "
-                                                myObj.data.games.game[i].status.o + " outs <br>" +
-
-                                    myObj.data.games.game[i].opposing_pitcher.first + " " +
-                                    myObj.data.games.game[i].opposing_pitcher.last + " vs " +
+                                    "Bottom " + myObj.data.games.game[i].status.inning + " - " +
+                                    myObj.data.games.game[i].status.o + " outs <br>" +
 
                                     myObj.data.games.game[i].pitcher.first + " " +
-                                    myObj.data.games.game[i].pitcher.last + "<br>" +
+                                    myObj.data.games.game[i].pitcher.last + " vs " +
 
-                                    myObj.data.games.game[i].pbp.last;
+                                    myObj.data.games.game[i].opposing_pitcher.first + " " +
+                                    myObj.data.games.game[i].opposing_pitcher.last + "<br>" +
+
+                                    myObj.data.games.game[i].pbp.last + "<br>";
 
                             }
                         }
