@@ -1,12 +1,12 @@
 //Config
-//TBD - set these values in config.js
+//***TODO - set these values in config.js
 var focusOn = "Yankees";
 
 //Date functions
 var dtDate = new Date();
 dtDate.setDate(dtDate.getDate());
 
-var strMth = ('0' + (dtDate.getMonth()+1)).slice(-2);
+var strMth = ('0' + (dtDate.getMonth() + 1)).slice(-2);
 var strDay = ('0' + dtDate.getDate()).slice(-2);
 var strYear = String(dtDate.getFullYear());
 
@@ -19,7 +19,8 @@ var strYear = "2016";
 
 //Create connection to pull MLB JSON data
 var output = document.getElementById("output");
-document.getElementById("btn1").onclick = function () {
+//***TODO change to onload instead of a button click
+document.getElementById("button").onclick = function () {
     var connReq = new XMLHttpRequest();
     connReq.onreadystatechange =
         function () {
@@ -60,14 +61,24 @@ document.getElementById("btn1").onclick = function () {
                                 output.innerHTML +=
                                     "S - " + myObj.data.games.game[i].save_pitcher.first + " " +
                                     myObj.data.games.game[i].save_pitcher.last + " (" +
-                                    myObj.data.games.game[i].save_pitcher.saves + ")<br>"
+                                    myObj.data.games.game[i].save_pitcher.saves + ")<br>" + 
+                                    myObj.data.games.game[i].alerts.text}
+                            else {myObj.data.games.game[i].alerts.text
+                            
                             }
                         }
-                        //Check if game is scheduled, if so, list probable losing pitcher
-                        else if (myObj.data.games.game[i].status.ind === "S") {
+                        //Check if game is scheduled, if so, list probable starting pitchers
+                        else if (myObj.data.games.game[i].status.ind === "S" ||
+                            myObj.data.games.game[i].status.ind === "P" ||
+                            myObj.data.games.game[i].status.ind === "PW") {
                             output.innerHTML +=
-                                myObj.data.games.game[i].away_team_name + " at " +
-                                myObj.data.games.game[i].home_team_name + " - " +
+                                myObj.data.games.game[i].away_team_name + " (" +
+                                myObj.data.games.game[i].away_win + "-" +
+                                myObj.data.games.game[i].away_loss + ") at " +
+
+                                myObj.data.games.game[i].home_team_name + " (" +
+                                myObj.data.games.game[i].home_win + "-" +
+                                myObj.data.games.game[i].home_loss + ") at " +
                                 myObj.data.games.game[i].time + " " + myObj.data.games.game[i].ampm + "<br>";
 
                             //If no starting pitcher is named, populate TBD
@@ -77,7 +88,9 @@ document.getElementById("btn1").onclick = function () {
                             else {
                                 var awayPitcher =
                                     myObj.data.games.game[i].away_probable_pitcher.first_name + " " +
-                                    myObj.data.games.game[i].away_probable_pitcher.last_name + " " +
+                                    myObj.data.games.game[i].away_probable_pitcher.last_name + " (" +
+                                    myObj.data.games.game[i].away_probable_pitcher.wins + "-" +
+                                    myObj.data.games.game[i].away_probable_pitcher.losses + ") " +
                                     myObj.data.games.game[i].away_probable_pitcher.era;
                             }
                             if (myObj.data.games.game[i].home_probable_pitcher.last_name === " ") {
@@ -86,28 +99,51 @@ document.getElementById("btn1").onclick = function () {
                             else {
                                 var homePitcher =
                                     myObj.data.games.game[i].home_probable_pitcher.first_name + " " +
-                                    myObj.data.games.game[i].home_probable_pitcher.last_name + " " +
+                                    myObj.data.games.game[i].home_probable_pitcher.last_name + " (" +
+                                    myObj.data.games.game[i].home_probable_pitcher.wins + "-" +
+                                    myObj.data.games.game[i].home_probable_pitcher.losses + ") " +
                                     myObj.data.games.game[i].home_probable_pitcher.era;
                             }
-                            output.innerHTML += awayPitcher + " vs " + homePitcher + " <br>";
+                            output.innerHTML += awayPitcher + " vs " + homePitcher + " <br>" +
+                                    myObj.data.games.game[i].alerts.text;
                         }
-                        //Output inning, pitcher, and score of in progress game.
+                        //Output inning, current pitcher, and score of in progress game.
                         else {
                             if (myObj.data.games.game[i].status.top_inning === "Y") {
                                 output.innerHTML +=
                                     myObj.data.games.game[i].away_team_name + " at " +
-                                    myObj.data.games.game[i].home_team_name + "<br>" +
+                                    myObj.data.games.game[i].home_team_name + " " +
                                     myObj.data.games.game[i].linescore.r.away + " - " +
-                                    myObj.data.games.game[i].linescore.r.home + " " +
-                                    "Top " + myObj.data.games.game[i].status.inning;
+                                    myObj.data.games.game[i].linescore.r.home + "<br>" +
+                                    "Top " + myObj.data.games.game[i].status.inning + " - " +
+                                             myObj.data.games.game[i].status.o + " outs <br>" +
+              
+                                    myObj.data.games.game[i].opposing_pitcher.first + " " +
+                                    myObj.data.games.game[i].opposing_pitcher.last + " vs " +
+
+                                    myObj.data.games.game[i].pitcher.first + " " +
+                                    myObj.data.games.game[i].pitcher.last + "<br>" +
+                                    
+                                    myObj.data.games.game[i].pbp.last;
+
                             }
                             else {
-                                output.innerHTML += 
+                                output.innerHTML +=
                                     myObj.data.games.game[i].away_team_name + " at " +
-                                    myObj.data.games.game[i].home_team_name + "<br>" +
+                                    myObj.data.games.game[i].home_team_name + " " +
                                     myObj.data.games.game[i].linescore.r.away + " - " +
-                                    myObj.data.games.game[i].linescore.r.home + " " +
-                                    "Bottom " + myObj.data.games.game[i].status.inning;
+                                    myObj.data.games.game[i].linescore.r.home + "<br>" +
+                                    "Bottom " + myObj.data.games.game[i].status.inning + " - "
+                                                myObj.data.games.game[i].status.o + " outs <br>" +
+
+                                    myObj.data.games.game[i].opposing_pitcher.first + " " +
+                                    myObj.data.games.game[i].opposing_pitcher.last + " vs " +
+
+                                    myObj.data.games.game[i].pitcher.first + " " +
+                                    myObj.data.games.game[i].pitcher.last + "<br>" +
+
+                                    myObj.data.games.game[i].pbp.last;
+
                             }
                         }
                     }
